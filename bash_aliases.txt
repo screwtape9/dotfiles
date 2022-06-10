@@ -1,0 +1,16 @@
+alias ll='ls -lh'
+alias lla='ls -alh'
+alias la='ls -a'
+alias cls=clear
+alias bye=exit
+alias SINFO='svn info'
+alias SMOD="svn status | egrep '^M |^D |^A '"
+alias SDIF='svn diff -x -w '
+alias SCO='svn co --username j.smith '
+alias revdirs='sudo find . -name .svn -prune -o -name .git -prune -o -type d -print -exec chmod 755 {} \;'
+alias DIF='diff -E -Z -b -w -B'
+alias LDIF='diff -q -r -E -Z -b -w -B -x "bin" -x "obj" -x ".svn" -x ".git" -x "CVS" '
+alias vg='valgrind --leak-check=full --track-fds=yes --trace-children=yes '
+alias DU='du -ch --max-depth=1 | sort -h'
+alias IV='sxiv -g 1920x1080'
+alias inet="ip -4 addr | egrep  -A1 \"^[0-9]+[: ]\"| awk '{print \$2}'"

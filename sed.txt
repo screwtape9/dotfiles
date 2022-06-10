@@ -1,0 +1,8 @@
+### replace string
+sed -i 's/STR_TO_REPLACE/REPLACMENT/g' *.cxx
+
+### remove trailing whitespace
+sed -i 's/[ \r\t]*$//' <file>
+
+### remove lines containing pattern
+sed -i '/PATTERN/d' <file>

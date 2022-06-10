@@ -1,0 +1,15 @@
+# list all files by modified date desc, exclude .svn dir
+find . -not \( -path ./.svn -prune \) -type f -exec ls -lht {} +
+
+# this might work also with the *
+find . -not \( -path *.svn -prune \) -type f -exec ls -lht {} +
+
+### find files and act upon each
+find . -regex '.*\.\(cxx\|h\)' -exec grep -H lottery_p2ln {} \;
+find . -regex '.*\.\(cxx\|h\)' -exec sed -i 's/lottery_p2ln/lottery_p2ld/g' {} \;
+
+find . -name "*.cxx" -exec grep -H lottery_p2ln {} \;
+find . -name "*.cxx" -exec sed -i 's/lottery_p2ln/lottery_p2ld/g' {} \;
+
+### list every cxx file that contains max_lottery_game_type
+find . -name "*.cxx" -exec grep -H max_lottery_game_type {} \; | awk -F':' '{ print $1; }' | sort | uniq

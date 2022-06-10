@@ -1,0 +1,58 @@
+GRX() {
+  if [ $# -ne 1 ]; then
+    echo "usage: GRX <string>"
+  else
+    CMD="find -regex '.*\.\(h\|c\|cc\|cs\|cpp\|cxx\)' -exec grep -n \"${1}\" {} +"
+    echo "$CMD"
+    eval "$CMD"
+  fi
+}
+
+GRPHP() {
+  if [ $# -ne 1 ]; then
+    echo "usage: GRPHP <string>"
+  else
+    CMD="find . -name *.php -exec grep -n \"${1}\" {} +"
+    echo "$CMD"
+    eval "$CMD"
+  fi
+}
+
+NS() {
+  if [ $# -ne 1 ]; then
+    netstat -atunp
+  else
+    netstat -atunp | grep -i "$1"
+  fi
+}
+
+SS() {
+  if [ $# -ne 1 ]; then
+    ss -atunp
+  else
+    ss -atunp | grep -i "$1"
+  fi
+}
+
+HIS() {
+  if [ $# -ne 1 ]; then
+    history
+  else
+    history | grep -ni "$1"
+  fi
+}
+
+FIND() {
+  if [ $# -ne 1 ]; then
+    find .
+  else
+    find . -name "$1"
+  fi
+}
+ 
+export -f GRX
+export -f GRPHP
+export -f NS
+export -f SS
+export -f HIS
+export -f FIND

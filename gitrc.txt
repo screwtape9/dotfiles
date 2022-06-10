@@ -1,0 +1,100 @@
+# .gitrc
+function git_has_trunc()
+{
+# I know version 1.8.2.3 does not have it, and version 1.8.3.1 does, so I'm
+# just checking to see if we have version >= 1.8.3.X
+  local VER=$(git --version | awk '{ print $3; }')
+  local OIFS=$IFS
+  IFS='.'
+  local ARR=(${VER})
+  IFS=$OIFS
+  [[ 10#${ARR[0]} -ge 2 ]] && return 0
+  [[ 10#${ARR[1]} -ge 9 ]] && return 0
+  [[ 10#${ARR[1]} -le 7 ]] && return 0
+  [[ 10#${ARR[2]} -ge 3 ]] && return 0
+  return 1
+}
+
+GIT_LOG_BASE="git log --color --pretty=format:'%Cred%h%Creset %C(cyan)%<(18,trunc)%an%Creset %C(yellow)(%cr) %C(white)%d%n%w(80,4,4)%s%n' --abbrev-commit"
+if ! git_has_trunc; then
+  GIT_LOG_BASE="git log --color --pretty=format:'%Cred%h%Creset %C(cyan)%an%Creset %C(yellow)(%cr) %C(white)%d%n%w(80,4,4)%s%n' --abbrev-commit"
+fi
+
+alias GDIF='git diff -b -w --ignore-space-at-eol --color --minimal'
+alias GSTAT='git status'
+alias GLOG="$GIT_LOG_BASE"
+
+GSB() {
+  if [ "$#" -ne 3 ]; then
+    echo "usage: GSB <repo> <branch name> <target dir>"
+  else
+    CMD="git clone git@otto:$1 --branch $2 --single-branch $3"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+GDP() {
+  if [ "$#" -ne 1 ]; then
+    echo "usage: GDP <commit hash>"
+  else
+    CMD="git diff-tree -p -r $1"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+GDT() {
+  if [ "$#" -ne 1 ]; then
+    echo "usage: GDT <commit hash>"
+  else
+    CMD="git diff-tree --pretty --name-only -r $1"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+FOLLOW() {
+  if [ "$#" -ne 1 ]; then
+    echo "usage: FOLLOW <file>"
+  else
+    CMD="$GIT_LOG_BASE --follow $1"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+GPA() {
+  if [ "$#" -ne 1 ]; then
+    echo "usage: GPA <string to match>"
+  else
+    CMD="$GIT_LOG_BASE -p -S $1"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+GTB() {
+  if [ "$#" -ne 1 ]; then
+    echo "usage: GTB <tag>"
+  else
+    CMD="git branch --contains tags/$1"
+    echo "$CMD"
+    eval $CMD
+  fi
+}
+
+CHANGES() {
+  BRANCH="origin/$(git rev-parse --abbrev-ref HEAD)"
+  CMD="$GIT_LOG_BASE HEAD..$BRANCH"
+  echo "$CMD"
+  eval $CMD
+}
+
+export -f GSB
+export -f GDP
+export -f GDT
+export -f FOLLOW
+export -f GPA
+export -f GTB
+export -f CHANGES

@@ -1,0 +1,1 @@
+strace -o /tmp/tracer0.log -f -tt -e trace=\!futex,nanosleep,sched_yield,getpid,gettid 3dplayer
