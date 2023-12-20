@@ -50,9 +50,27 @@ FIND() {
   fi
 }
  
+PG() {
+  if [ $# -lt 1 ]; then
+    echo "usage: ${0} <proc name>"
+  else
+    PIDLIST=""
+    for PROC in "$@"; do
+      PIDS=( $(pidof "$PROC") )
+      [[ $? -ne 0 ]] && continue
+      for PID in "${PIDS[@]}"; do
+        [[ -z "$PIDLIST" ]] && PIDLIST+="${PID}" || PIDLIST+=",${PID}"
+      done
+    done
+    [[ -z "$PIDLIST" ]] && echo "No procs found." && exit 1
+    ps -p "${PIDLIST}" -o pid,user,lstart,command
+  fi
+}
+
 export -f GRX
 export -f GRPHP
 export -f NS
 export -f SS
 export -f HIS
 export -f FIND
+export -f PG

@@ -4,6 +4,12 @@ find . -not \( -path ./.svn -prune \) -type f -exec ls -lht {} +
 # this might work also with the *
 find . -not \( -path *.svn -prune \) -type f -exec ls -lht {} +
 
+# list c++ source files by mod date
+find -regex '.*\.\(h\|c\|cc\|cs\|cpp\|cxx\)' -type f -printf '%TY-%Tm-%Td %TH:%TM %P\n' 2>/dev/null | sort | tail -n "${2:-30}"
+
+# think i like this one better
+find -regex '.*\.\(h\|c\|cc\|cs\|cpp\|cxx\)' -type f -exec ls -lht {} + | head -n 20
+
 ### find files and act upon each
 find . -regex '.*\.\(cxx\|h\)' -exec grep -H lottery_p2ln {} \;
 find . -regex '.*\.\(cxx\|h\)' -exec sed -i 's/lottery_p2ln/lottery_p2ld/g' {} \;
@@ -13,3 +19,9 @@ find . -name "*.cxx" -exec sed -i 's/lottery_p2ln/lottery_p2ld/g' {} \;
 
 ### list every cxx file that contains max_lottery_game_type
 find . -name "*.cxx" -exec grep -H max_lottery_game_type {} \; | awk -F':' '{ print $1; }' | sort | uniq
+
+
+
+# REGEX
+
+egrep '^2023-04-17.*(eth|net).*' /var/log/syslog
