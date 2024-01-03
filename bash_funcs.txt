@@ -62,7 +62,7 @@ PG() {
         [[ -z "$PIDLIST" ]] && PIDLIST+="${PID}" || PIDLIST+=",${PID}"
       done
     done
-    [[ -z "$PIDLIST" ]] && echo "No procs found." && exit 1
+    [[ -z "$PIDLIST" ]] && echo "No procs found." && return 1
     ps -p "${PIDLIST}" -o pid,user,lstart,command
   fi
 }
