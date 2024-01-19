@@ -2,7 +2,7 @@ GRX() {
   if [ $# -ne 1 ]; then
     echo "usage: GRX <string>"
   else
-    CMD="find -regex '.*\.\(h\|c\|cc\|cs\|cpp\|cxx\)' -exec grep -n \"${1}\" {} +"
+    CMD="find -regex '.*\.\(h\|hxx\|hpp\|c\|cc\|cs\|cpp\|cxx\)' -exec grep -n \"${1}\" {} +"
     echo "$CMD"
     eval "$CMD"
   fi
@@ -67,6 +67,34 @@ PG() {
   fi
 }
 
+SDIF() {
+  if [ "$#" -ne 1 ]; then
+    if which colordiff > /dev/null 2>&1; then
+      svn diff -x -w | colordiff
+    else
+      svn diff -x -w
+    fi
+  else
+    if which colordiff > /dev/null 2>&1; then
+      svn diff -x -w "$1" | colordiff
+    else
+      svn diff -x -w "$1"
+    fi
+  fi
+}
+
+SLOG() {
+  if which slog > /dev/null 2>&1; then
+    OPTS=""
+    for var in "$@"; do [[ "$var" == "--xml" ]] || OPTS+="$var "; done
+    OPTS+="--xml"
+    echo "svn log $OPTS | slog"
+    eval svn log "$OPTS" | slog
+  else
+    echo "Can't find slog"
+  fi
+}
+
 export -f GRX
 export -f GRPHP
 export -f NS
@@ -74,3 +102,5 @@ export -f SS
 export -f HIS
 export -f FIND
 export -f PG
+export -f SDIF
+export -f SLOG
